@@ -42,13 +42,17 @@ export default function AvailableMeals() {
     <>
       {!isFecthing && availableMeals.length > 0 && (
         <div>
-          <ul>
+          <ul id={"meals"}>
             {availableMeals.map((meal) => (
-              <li key={meal.id}>
+              <li key={meal.id} className={"meal-item"}>
+                <img
+                  src={`http://localhost:3000/${meal.image}`}
+                  alt={meal.image}
+                />
                 <h3> {meal.name}</h3>
                 <p> ${meal.price}</p>
-                <p>{meal.description}</p>
-                <button>Add</button>
+                <p id="meal-item-description">{meal.description}</p>
+                <button className={"meal-item-actions"}>Add</button>
               </li>
             ))}
           </ul>
