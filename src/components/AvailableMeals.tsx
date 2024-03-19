@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { fetchAvailableMeals } from "../htpp.ts";
+import { Error } from "./Error.tsx";
 
 export default function AvailableMeals() {
   const [isFecthing, setIsFetching] = useState(false);
@@ -22,21 +23,12 @@ export default function AvailableMeals() {
       }
       setIsFetching(false);
     }
+
     fetchMeals();
   }, []);
 
   if (error) {
-    return (
-      <div>
-        <h2>"An error occured!"</h2>
-        <p>{error.message}</p>
-        {
-          <div>
-            <button>Okay</button>
-          </div>
-        }
-      </div>
-    );
+    return <Error title={"An error occured!"} message={error.message} />;
   }
   return (
     <>
@@ -52,7 +44,7 @@ export default function AvailableMeals() {
                 <h3> {meal.name}</h3>
                 <p> ${meal.price}</p>
                 <p id="meal-item-description">{meal.description}</p>
-                <button className={"meal-item-actions"}>Add</button>
+                <button className={"button"}>Add</button>
               </li>
             ))}
           </ul>
