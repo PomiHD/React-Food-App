@@ -4,7 +4,7 @@ import { Error } from "./Error.tsx";
 import Meals from "./Meals.tsx";
 
 export default function AvailableMeals() {
-  const [isFecthing, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [availableMeals, setAvailableMeals] = useState([]);
   const [error, setError] = useState(null);
 
@@ -35,7 +35,7 @@ export default function AvailableMeals() {
     <>
       <Meals
         meals={availableMeals}
-        isLoading={isFecthing}
+        isLoading={isFetching}
         loadingText="Loading meals data..."
         fallbackText="No meals available."
       />
