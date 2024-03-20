@@ -1,4 +1,5 @@
 ﻿import { currencyFormatter } from "../util/formatting.ts";
+import Button from "../UI/Button.tsx";
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
   return (
     <>
@@ -25,7 +26,7 @@ export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
                   <p id="meal-item-description">{meal.description}</p>
                 </div>
                 <p className={"meal-item-actions"}>
-                  <button className={"button"}>Add to Chart</button>
+                  <Button className={"button"}>Add to Chart</Button>
                 </p>
               </article>
             </li>
