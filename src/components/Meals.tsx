@@ -1,6 +1,5 @@
 ﻿import { currencyFormatter } from "../util/formatting.ts";
 import Button from "../UI/Button.tsx";
-
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
   return (
     <>
