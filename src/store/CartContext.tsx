@@ -16,10 +16,12 @@ const CartReducer = (state, action) => {
 
   return state;
 };
+
 function CartProvider({ children }) {
   useReducer(CartReducer, { items: [] });
 
   function addItemToCart() {}
+
   function updateItemQuantity() {}
 
   const context = {
@@ -32,4 +34,5 @@ function CartProvider({ children }) {
     <CartContext.Provider value={context}>{children}</CartContext.Provider>
   );
 }
+
 export default CartProvider;
