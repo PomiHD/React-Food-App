@@ -1,7 +1,10 @@
 ﻿import logoImg from "../assets/logo.jpg";
 import Button from "../UI/Button.tsx";
+import { useContext } from "react";
+import { CartContext } from "../store/CartContext.tsx";
 
 export default function Header() {
+  const { items } = useContext(CartContext);
   return (
     <>
       <header id={"main-header"}>
@@ -10,7 +13,7 @@ export default function Header() {
           <h1>ReactFood</h1>
         </div>
         <nav>
-          <Button textOnly>Cart (0)</Button>
+          <Button textOnly>Cart ({items.length})</Button>
         </nav>
       </header>
     </>
