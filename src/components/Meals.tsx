@@ -1,6 +1,9 @@
 ﻿import { currencyFormatter } from "../util/formatting.ts";
 import Button from "../UI/Button.tsx";
+import { useContext } from "react";
+import { CartContext } from "../store/CartContext.tsx";
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
+  const { addItemToCart } = useContext(CartContext);
   return (
     <>
       {isLoading && (
@@ -26,7 +29,11 @@ export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
                   <p id="meal-item-description">{meal.description}</p>
                 </div>
                 <p className={"meal-item-actions"}>
-                  <Button className={"button"} textOnly={false}>
+                  <Button
+                    className={"button"}
+                    textOnly={false}
+                    onClick={() => addItemToCart(meal)}
+                  >
                     Add to Chart
                   </Button>
                 </p>

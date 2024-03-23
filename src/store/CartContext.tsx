@@ -2,8 +2,8 @@
 
 export const CartContext = createContext({
   items: [],
-  addItemToCart: () => {},
-  removeItemQuantity: () => {},
+  addItemToCart: (meal) => {},
+  removeItemQuantity: (id) => {},
 });
 const CartReducer = (state, action) => {
   // ... update state to add meal item
@@ -21,7 +21,7 @@ const CartReducer = (state, action) => {
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
       updatedItems.push({
-        ...state.items,
+        ...action.item,
         quantity: 1,
       });
     }
@@ -30,6 +30,7 @@ const CartReducer = (state, action) => {
   // ... update state to update meal item quantity
   if (action.type === "REMOVE_ITEM") {
     const updatedItems = [...state.items];
+    console.log(updatedItems);
     const existingCartItemIndex = updatedItems.findIndex(
       (item) => item.id == action.id,
     );
@@ -54,7 +55,7 @@ function CartContextProvider({ children }) {
   });
 
   function addItemToCart(item: any) {
-    dispatchCartAction({ type: "ADD_ITEM", item: item });
+    dispatchCartAction({ type: "ADD_ITEM", item });
   }
 
   function removeItemQuantity(id: string) {
@@ -69,6 +70,7 @@ function CartContextProvider({ children }) {
     addItemToCart,
     removeItemQuantity,
   };
+  console.log(context);
 
   return (
     <CartContext.Provider value={context}>{children}</CartContext.Provider>
