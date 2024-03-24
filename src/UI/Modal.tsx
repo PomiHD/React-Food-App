@@ -1,4 +1,5 @@
 ﻿import { forwardRef, useImperativeHandle, useRef } from "react";
+import Cart from "../components/Cart.tsx";
 
 export const Modal = forwardRef(function Modal({ title, modalActions }, ref) {
   const dialog = useRef();
@@ -14,7 +15,7 @@ export const Modal = forwardRef(function Modal({ title, modalActions }, ref) {
   return (
     <dialog className="modal" ref={dialog}>
       <h2>{title}</h2>
-      Cart
+      <Cart />
       <form method="dialog" id="modal-actions">
         {modalActions}
       </form>
