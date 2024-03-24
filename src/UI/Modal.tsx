@@ -12,7 +12,7 @@ export const Modal = forwardRef(function Modal({ title, modalActions }, ref) {
   });
 
   return (
-    <dialog id="modal" ref={dialog}>
+    <dialog className="modal" ref={dialog}>
       <h2>{title}</h2>
       Cart
       <form method="dialog" id="modal-actions">
