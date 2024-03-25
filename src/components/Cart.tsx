@@ -27,7 +27,12 @@ export default function Cart() {
       </Button>
     );
   return (
-    <Modal className={"cart"} title={"Your Cart"} open={progress === "cart"}>
+    <Modal
+      className={"cart"}
+      title={"Your Cart"}
+      open={progress === "cart"}
+      onClose={progress === "cart" ? hideCart : null}
+    >
       {items.length === 0 && <p>No items in cart!</p>}
       {items.length > 0 && (
         <ul>

@@ -93,7 +93,11 @@ export default function Checkout() {
   }
 
   return (
-    <Modal title={"Your details"} open={progress === "checkout"}>
+    <Modal
+      title={"Your details"}
+      open={progress === "checkout"}
+      onClose={hideCheckout}
+    >
       <form onSubmit={handelSubmit}>
         <p>
           Total Amount: <strong>{currencyFormatter.format(totalPrice)}</strong>
@@ -105,34 +109,6 @@ export default function Checkout() {
           <Input label={"Postal Code"} type={"text"} id={"postal-code"} />
           <Input label={"City"} type={"text"} id={"city"} />
         </div>
-
-        {/*<div className="control">*/}
-        {/*  <label htmlFor="clientName">Name</label>*/}
-        {/*  <input name="clientName" required ref={nameRef} />*/}
-        {/*</div>*/}
-
-        {/*<div className="control">*/}
-        {/*  <label htmlFor="email">Email</label>*/}
-        {/*  <input type="email" name="email" ref={emailRef} />*/}
-        {/*  <div className="control">*/}
-        {/*    {emailIsInvalid && <p>Please enter a valid email</p>}*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-
-        {/*<div className="control">*/}
-        {/*  <label htmlFor="address">Address</label>*/}
-        {/*  <input name="address" required ref={addressRef} />*/}
-        {/*</div>*/}
-
-        {/*<div className="control">*/}
-        {/*  <label htmlFor="postcode">PostalCode</label>*/}
-        {/*  <input name="postcode" required ref={postcodeRef} />*/}
-        {/*</div>*/}
-
-        {/*<div className="control">*/}
-        {/*  <label htmlFor="city">City</label>*/}
-        {/*  <input name="city" required ref={cityRef} />*/}
-        {/*</div>*/}
 
         <p className={"modal-actions"}>
           <Button textOnly onClick={showCart}>
