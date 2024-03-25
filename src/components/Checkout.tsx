@@ -5,6 +5,7 @@ import { CartContext } from "../store/CartContext.tsx";
 import { UserProgressContext } from "../store/UserProgressContext.tsx";
 import { placeOrder } from "../htpp.ts";
 import { currencyFormatter } from "../util/formatting.ts";
+import Input from "../UI/Input.tsx";
 
 export default function Checkout() {
   const { items } = useContext(CartContext);
@@ -94,40 +95,51 @@ export default function Checkout() {
   return (
     <Modal title={"Your details"} open={progress === "checkout"}>
       <form onSubmit={handelSubmit}>
-        <div className="control">
-          <label htmlFor="clientName">Name</label>
-          <input name="clientName" required ref={nameRef} />
+        <p>
+          Total Amount: <strong>{currencyFormatter.format(totalPrice)}</strong>
+        </p>
+        <Input label={"Full Name"} type={"text"} id={"full-name"} />
+        <Input label={"Email Address"} type={"email"} id={"email"} />
+        <Input label={"Street"} type={"text"} id={"street"} />
+        <div className={"control-row"}>
+          <Input label={"Postal Code"} type={"text"} id={"postal-code"} />
+          <Input label={"City"} type={"text"} id={"city"} />
         </div>
 
-        <div className="control">
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" ref={emailRef} />
-          <div className="control">
-            {emailIsInvalid && <p>Please enter a valid email</p>}
-          </div>
-        </div>
+        {/*<div className="control">*/}
+        {/*  <label htmlFor="clientName">Name</label>*/}
+        {/*  <input name="clientName" required ref={nameRef} />*/}
+        {/*</div>*/}
 
-        <div className="control">
-          <label htmlFor="address">Address</label>
-          <input name="address" required ref={addressRef} />
-        </div>
+        {/*<div className="control">*/}
+        {/*  <label htmlFor="email">Email</label>*/}
+        {/*  <input type="email" name="email" ref={emailRef} />*/}
+        {/*  <div className="control">*/}
+        {/*    {emailIsInvalid && <p>Please enter a valid email</p>}*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-        <div className="control">
-          <label htmlFor="postcode">PostalCode</label>
-          <input name="postcode" required ref={postcodeRef} />
-        </div>
+        {/*<div className="control">*/}
+        {/*  <label htmlFor="address">Address</label>*/}
+        {/*  <input name="address" required ref={addressRef} />*/}
+        {/*</div>*/}
 
-        <div className="control">
-          <label htmlFor="city">City</label>
-          <input name="city" required ref={cityRef} />
-        </div>
+        {/*<div className="control">*/}
+        {/*  <label htmlFor="postcode">PostalCode</label>*/}
+        {/*  <input name="postcode" required ref={postcodeRef} />*/}
+        {/*</div>*/}
+
+        {/*<div className="control">*/}
+        {/*  <label htmlFor="city">City</label>*/}
+        {/*  <input name="city" required ref={cityRef} />*/}
+        {/*</div>*/}
 
         <p className={"modal-actions"}>
           <Button textOnly onClick={showCart}>
             Back
           </Button>
           <Button type="submit" onClick={hideCheckout}>
-            Submit
+            Submit Order
           </Button>
         </p>
       </form>

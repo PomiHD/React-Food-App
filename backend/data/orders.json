@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "customer": {
+      "name": "Samuel Yin",
+      "email": "wsgddjy@live.com",
+      "address": "179 Hale Street",
+      "postcode": "4000",
+      "city": "(UTC+10:00) Brisbane"
+    },
+    "items": [
+      { "id": "m1", "price": "$8.99", "quantity": 1 },
+      { "id": "m2", "price": "$12.99", "quantity": 1 },
+      { "id": "m3", "price": "$7.99", "quantity": 1 }
+    ],
+    "totalPrice": "$29.97",
+    "id": "7d2c90d7-afd7-4bcf-e7a8-07eff393d47d"
+  }
+]
