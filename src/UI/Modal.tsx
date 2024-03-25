@@ -1,28 +1,25 @@
-﻿import { forwardRef, useImperativeHandle, useRef } from "react";
-import Cart from "../components/Cart.tsx";
+﻿import { useEffect, useRef } from "react";
+
 import { createPortal } from "react-dom";
 
-export const Modal = forwardRef(function Modal({ title, modalActions }, ref) {
+function Modal({ title, children, open, className = "" }) {
   const dialog = useRef();
-
-  useImperativeHandle(ref, () => {
-    return {
-      open: () => {
-        dialog.current.showModal();
-      },
-    };
-  });
+  useEffect(() => {
+    const modal = dialog.current;
+    if (open) {
+      // @ts-ignore
+      modal.showModal();
+    }
+    return () => modal.close();
+  }, [open]);
 
   return createPortal(
-    <dialog className="modal" ref={dialog}>
+    <dialog className={`modal ${className}`} ref={dialog}>
       <h2>{title}</h2>
-      <Cart />
-      <form method="dialog" id="modal-actions">
-        {modalActions}
-      </form>
+      {children}
     </dialog>,
     document.getElementById("modal"),
   );
-});
+}
 
 export default Modal;

@@ -2,6 +2,7 @@
 import Button from "../UI/Button.tsx";
 import { useContext } from "react";
 import { CartContext } from "../store/CartContext.tsx";
+
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
   const { addItemToCart } = useContext(CartContext);
   return (

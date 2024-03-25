@@ -1,15 +1,33 @@
 ﻿import { useContext } from "react";
 import { CartContext } from "../store/CartContext.tsx";
 import { currencyFormatter } from "../util/formatting.ts";
+import Modal from "../UI/Modal.tsx";
+import Button from "../UI/Button.tsx";
+import { UserProgressContext } from "../store/UserProgressContext.tsx";
 
 export default function Cart() {
+  const { progress, hideCart, showCheckout } = useContext(UserProgressContext);
   const { items, removeItemQuantity, addItemToCart } = useContext(CartContext);
+  const cartQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
+  const modalActions =
+    cartQuantity > 0 ? (
+      <>
+        <Button textOnly onClick={hideCart}>
+          Close
+        </Button>
+        <Button onClick={showCheckout}>Checkout</Button>
+      </>
+    ) : (
+      <Button textOnly onClick={hideCart}>
+        Close
+      </Button>
+    );
   return (
-    <div className={"cart"}>
+    <Modal className={"cart"} title={"Your Cart"} open={progress === "cart"}>
       {items.length === 0 && <p>No items in cart!</p>}
       {items.length > 0 && (
         <ul>
@@ -33,6 +51,7 @@ export default function Cart() {
       <p className={"cart-total"}>
         Cart Total: <strong>{currencyFormatter.format(totalPrice)}</strong>
       </p>
-    </div>
+      <p className={"modal-actions"}>{modalActions}</p>
+    </Modal>
   );
 }
