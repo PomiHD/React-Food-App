@@ -56,7 +56,7 @@ export default function Checkout() {
     </span>
   ) : (
     <>
-      {/*// the button in <form /> should have type={"button"}, or it will submit the form when clicked which is not the desired behavior*/}
+      {/*// the button in <form /> should have type={"reset"}, or it will submit the form when clicked which is not the desired behavior*/}
       <Button textOnly type={"reset"} onClick={hideCheckout}>
         Close
       </Button>
