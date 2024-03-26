@@ -12,7 +12,11 @@ export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
           <p className={"text-red-600"}>{loadingText}</p>
         </div>
       )}
-      {!isLoading && meals.length === 0 && <p>{fallbackText}</p>}
+      {!isLoading && meals.length === 0 && (
+        <div className={"mx-auto text-center border-b-orange-700"}>
+          <p className={"text-red-600"}>{fallbackText}</p>
+        </div>
+      )}
       {!isLoading && meals.length > 0 && (
         <ul id={"meals"}>
           {meals.map((meal) => (
