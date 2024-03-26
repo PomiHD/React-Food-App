@@ -14,11 +14,16 @@ export default function useHttp(url, config, initialData) {
   const [data, setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+
+  function clearData() {
+    setData(initialData);
+  }
+
   const sendRequest = useCallback(
-    async function sendRequest() {
+    async function sendRequest(data) {
       setIsLoading(true);
       try {
-        const resData = await sendHttpRequest(url, config);
+        const resData = await sendHttpRequest(url, { ...config, body: data });
         setData(resData);
       } catch (error) {
         setError(error.message || "Something went wrong!");
@@ -40,36 +45,6 @@ export default function useHttp(url, config, initialData) {
     isLoading,
     error,
     sendRequest,
+    clearData,
   };
 }
-
-// export default function useHttp(){
-//     const [isLoading, setIsLoading] = useState(false);
-//     const [error, setError] = useState(null);
-//     const [data, setData] = useState(null);
-//     const sendRequest = useCallback(async (requestConfig, applyData) => {
-//       setIsLoading(true);
-//       setError(null);
-//       try {
-//         const response = await fetch(requestConfig.url, {
-//           method: requestConfig.method ? requestConfig.method : "GET",
-//           headers: requestConfig.headers ? requestConfig.headers : {},
-//           body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
-//         });
-//         if (!response.ok) {
-//           throw new Error("Request failed!");
-//         }
-//         const data = await response.json();
-//         applyData(data);
-//       } catch (error) {
-//         setError(error.message || "Something went wrong!");
-//       }
-//       setIsLoading(false);
-//     }, []);
-//     return {
-//       isLoading,
-//       error,
-//       data,
-//       sendRequest,
-//     };
-// }

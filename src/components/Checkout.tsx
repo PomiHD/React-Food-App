@@ -1,60 +1,85 @@
 ﻿import Modal from "../UI/Modal.tsx";
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import Button from "../UI/Button.tsx";
 import { CartContext } from "../store/CartContext.tsx";
 import { UserProgressContext } from "../store/UserProgressContext.tsx";
-import { placeOrder } from "../htpp.ts";
 import { currencyFormatter } from "../util/formatting.ts";
 import Input from "../UI/Input.tsx";
 import { Error } from "./Error.tsx";
+import useHttp from "../hooks/useHttp.tsx";
 
+const requestConfig = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
+const url = "http://localhost:3000/orders";
 export default function Checkout() {
-  const { items } = useContext(CartContext);
+  const { items, clearCart } = useContext(CartContext);
   const { progress, showCart, hideCheckout } = useContext(UserProgressContext);
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
-
-  const nameRef = useRef("");
-  const emailRef = useRef("");
-  const streetRef = useRef("");
-  const postcodeRef = useRef("");
-  const cityRef = useRef("");
-
-  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [errorUpdatingOrder, setErrorUpdatingOrder] = useState(false);
-  async function handelPlaceOrder(items, customerData) {
-    try {
-      await placeOrder(items, customerData);
-    } catch (error) {
-      console.log(error.message);
-      setErrorUpdatingOrder({
-        message:
-          error.message || "Failed to place order. Please try again later.",
-      });
-    }
+  const {
+    data,
+    isLoading: isSending,
+    error,
+    sendRequest,
+    clearData,
+  } = useHttp(url, requestConfig);
+  function handelFinish() {
+    clearData();
+    clearCart();
+    hideCheckout();
   }
+
   function handelSubmit(event) {
     event.preventDefault();
     const fd = new FormData(event.target);
     const customerData = Object.fromEntries(fd.entries());
-    // validate email address
-    const emailIsValid = customerData.email.includes("@");
-    if (!emailIsValid) {
-      setEmailIsInvalid(true);
-      setErrorUpdatingOrder({
-        message: "Please enter a valid email address.",
-      });
-      return (
-        <Error
-          message={"Please enter a valid email address."}
-          title={"Invalid Email Address"}
-        />
-      );
-    }
 
-    handelPlaceOrder(items, customerData);
+    sendRequest(
+      JSON.stringify({
+        order: {
+          items: items,
+          customer: customerData,
+        },
+      }),
+    );
+  }
+
+  const modalActions = isSending ? (
+    <span>
+      <p>Sending order data...</p>
+    </span>
+  ) : (
+    <>
+      <Button textOnly onClick={showCart}>
+        Back
+      </Button>
+      <Button type="submit">Submit Order</Button>
+    </>
+  );
+
+  if (data && !error) {
+    return (
+      <Modal
+        title={"Success"}
+        open={progress === "checkout"}
+        onClose={handelFinish}
+      >
+        <p>Order placed successfully!</p>
+        <p>
+          We will deliver your order to the provided address as soon as
+          possible.
+        </p>
+        <Button className={"modal-actions"} onClick={handelFinish}>
+          Okay
+        </Button>
+      </Modal>
+    );
   }
 
   return (
@@ -67,30 +92,15 @@ export default function Checkout() {
         <p>
           Total Amount: <strong>{currencyFormatter.format(totalPrice)}</strong>
         </p>
-        <Input label={"Full Name"} type={"text"} id={"name"} ref={nameRef} />
-        <Input
-          label={"Email Address"}
-          type={"email"}
-          id={"email"}
-          ref={emailRef}
-        />
-        <Input label={"Street"} type={"text"} id={"street"} ref={streetRef} />
+        <Input label={"Full Name"} type={"text"} id={"name"} />
+        <Input label={"Email Address"} type={"email"} id={"email"} />
+        <Input label={"Street"} type={"text"} id={"street"} />
         <div className={"control-row"}>
-          <Input
-            label={"Postal Code"}
-            type={"text"}
-            id={"postal-code"}
-            ref={postcodeRef}
-          />
-          <Input label={"City"} type={"text"} id={"city"} ref={cityRef} />
+          <Input label={"Postal Code"} type={"text"} id={"postal-code"} />
+          <Input label={"City"} type={"text"} id={"city"} />
         </div>
-
-        <p className={"modal-actions"}>
-          <Button textOnly onClick={showCart}>
-            Back
-          </Button>
-          <Button type="submit">Submit Order</Button>
-        </p>
+        {error && <Error title={"Failed to submit order!"} message={error} />}
+        <div className={"modal-actions"}>{modalActions}</div>
       </form>
     </Modal>
   );
