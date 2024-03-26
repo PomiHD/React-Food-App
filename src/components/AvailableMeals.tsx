@@ -1,32 +1,14 @@
-﻿import { useEffect, useState } from "react";
-import { fetchAvailableMeals } from "../htpp.ts";
-import { Error } from "./Error.tsx";
+﻿import { Error } from "./Error.tsx";
 import Meals from "./Meals.tsx";
+import useHttp from "../hooks/useHttp.tsx";
 
+const requestConfig = {}; // to prevent loop in sendRequest due to useCallBack
 export default function AvailableMeals() {
-  const [isFetching, setIsFetching] = useState(false);
-  const [availableMeals, setAvailableMeals] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function fetchMeals() {
-      setIsFetching(true);
-      try {
-        const fetchedMeals = await fetchAvailableMeals();
-        setAvailableMeals(fetchedMeals);
-        setIsFetching(false);
-        console.log(fetchedMeals);
-      } catch (error) {
-        setError({
-          message:
-            error.message || "Could not fetch Meals. Please try again later.",
-        });
-      }
-      setIsFetching(false);
-    }
-
-    fetchMeals();
-  }, []);
+  const {
+    data: availableMeals,
+    isLoading: isFetching,
+    error,
+  } = useHttp("http://localhost:3000/meals", requestConfig, []); // [] to prevent undefined error
 
   if (error) {
     return <Error title={"An error occured!"} message={error.message} />;
