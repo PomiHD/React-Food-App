@@ -3,7 +3,7 @@ import Meals from "./Meals.tsx";
 import useHttp from "../hooks/useHttp.tsx";
 
 const requestConfig = {}; // to prevent loop in sendRequest due to useCallBack
-const url = "http://localhost:3000/meals";
+const url = "http://localhost:5013/api/Meals";
 export default function AvailableMeals() {
   const {
     data: availableMeals,
