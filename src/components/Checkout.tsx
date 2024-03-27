@@ -28,10 +28,16 @@ export default function Checkout() {
     error,
     sendRequest,
     clearData,
+    clearError,
   } = useHttp(url, requestConfig);
   function handelFinish() {
     clearData();
     clearCart();
+    hideCheckout();
+  }
+
+  function handelClose() {
+    clearError();
     hideCheckout();
   }
 
@@ -55,7 +61,7 @@ export default function Checkout() {
   ) : (
     <>
       {/*// the button in <form /> should have type={"reset"}, or it will submit the form when clicked which is not the desired behavior*/}
-      <Button textOnly type={"reset"} onClick={hideCheckout}>
+      <Button textOnly type={"reset"} onClick={handelClose}>
         Close
       </Button>
       <Button type="submit">Submit Order</Button>
