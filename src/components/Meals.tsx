@@ -2,7 +2,7 @@
 import Button from "../UI/Button.tsx";
 import { useContext } from "react";
 import { CartContext } from "../store/CartContext.tsx";
-
+const url = "http://localhost:5013";
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
   const { addItemToCart } = useContext(CartContext);
   return (
@@ -22,10 +22,7 @@ export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
           {meals.map((meal) => (
             <li key={meal.id} className={"meal-item"}>
               <article>
-                <img
-                  src={`http://localhost:3000/${meal.image}`}
-                  alt={meal.image}
-                />
+                <img src={`${url}/${meal.image}`} alt={meal.image} />
                 <div>
                   <h3> {meal.name}</h3>
                   <p className={"meal-item-price"}>

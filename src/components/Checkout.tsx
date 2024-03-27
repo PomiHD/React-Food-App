@@ -14,10 +14,10 @@ const requestConfig = {
     "Content-Type": "application/json",
   },
 };
-const url = "http://localhost:3000/orders";
+const url = "http://localhost:5013/api/Orders";
 export default function Checkout() {
   const { items, clearCart } = useContext(CartContext);
-  const { progress, showCart, hideCheckout } = useContext(UserProgressContext);
+  const { progress, hideCheckout } = useContext(UserProgressContext);
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
@@ -42,10 +42,8 @@ export default function Checkout() {
 
     sendRequest(
       JSON.stringify({
-        order: {
-          items: items,
-          customer: customerData,
-        },
+        items: items,
+        customer: customerData,
       }),
     );
   }
@@ -97,7 +95,7 @@ export default function Checkout() {
         <Input label={"Email Address"} type={"email"} id={"email"} />
         <Input label={"Street"} type={"text"} id={"street"} />
         <div className={"control-row"}>
-          <Input label={"Postal Code"} type={"text"} id={"postal-code"} />
+          <Input label={"postalCode"} type={"text"} id={"postalCode"} />
           <Input label={"City"} type={"text"} id={"city"} />
         </div>
         {error && <Error title={"Failed to submit order!"} message={error} />}
