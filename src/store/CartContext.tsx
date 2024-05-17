@@ -1,12 +1,36 @@
-﻿import { createContext, useReducer } from "react";
+﻿import { createContext, ReactNode, useReducer } from "react";
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  quantity?: number;
+};
+type CartsState = {
+  items: CartItem[];
+};
+type CartContextValue = CartsState & {
+  addItemToCart: (meal: CartItem) => void;
+  removeItemQuantity: (id: string) => void;
+  clearCart: () => void;
+};
 
-export const CartContext = createContext({
-  items: [],
-  addItemToCart: (meal) => {},
-  removeItemQuantity: (id) => {},
-  clearCart: () => {},
-});
-const CartReducer = (state, action) => {
+type AddItemAction = {
+  type: "ADD_ITEM";
+  item: CartItem;
+};
+type RemoveItemAction = {
+  type: "REMOVE_ITEM";
+  id: string;
+};
+type ClearCartAction = {
+  type: "CLEAR_CART";
+};
+type Action = AddItemAction | RemoveItemAction | ClearCartAction;
+
+export const CartContext = createContext<CartContextValue | null>(null);
+const CartReducer = (state: CartsState, action: Action) => {
   // ... update state to add meal item
   if (action.type === "ADD_ITEM") {
     const updatedItems = [...state.items];
@@ -17,7 +41,7 @@ const CartReducer = (state, action) => {
     if (existingCartItem) {
       const updatedItem = {
         ...existingCartItem,
-        quantity: existingCartItem.quantity + 1,
+        quantity: existingCartItem.quantity! + 1,
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
@@ -41,7 +65,7 @@ const CartReducer = (state, action) => {
     } else {
       const updatedItem = {
         ...existingCartItem,
-        quantity: existingCartItem.quantity - 1,
+        quantity: existingCartItem.quantity! - 1,
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     }
@@ -54,30 +78,29 @@ const CartReducer = (state, action) => {
   return state;
 };
 
-function CartContextProvider({ children }) {
+type CartContextProviderProps = {
+  children: ReactNode;
+};
+
+function CartContextProvider({ children }: CartContextProviderProps) {
   const [cartState, dispatchCartAction] = useReducer(CartReducer, {
     items: [],
   });
 
-  function addItemToCart(item: any) {
-    dispatchCartAction({ type: "ADD_ITEM", item });
-  }
-
-  function removeItemQuantity(id: string) {
-    dispatchCartAction({
-      type: "REMOVE_ITEM",
-      id: id,
-    });
-  }
-  function clearCart() {
-    dispatchCartAction({ type: "CLEAR_CART" });
-  }
-
-  const context = {
+  const context: CartContextValue = {
     items: cartState.items,
-    addItemToCart,
-    removeItemQuantity,
-    clearCart,
+    addItemToCart(item: CartItem) {
+      dispatchCartAction({ type: "ADD_ITEM", item });
+    },
+    removeItemQuantity(id: string) {
+      dispatchCartAction({
+        type: "REMOVE_ITEM",
+        id: id,
+      });
+    },
+    clearCart() {
+      dispatchCartAction({ type: "CLEAR_CART" });
+    },
   };
   // console.log(context);
 
