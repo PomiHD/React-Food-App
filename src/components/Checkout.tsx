@@ -1,7 +1,7 @@
 ﻿import Modal from "../UI/Modal.tsx";
 import { useContext } from "react";
 import Button from "../UI/Button.tsx";
-import { CartContext } from "../store/CartContext.tsx";
+import { useCartContext } from "../store/CartContext.tsx";
 import { UserProgressContext } from "../store/UserProgressContext.tsx";
 import { currencyFormatter } from "../util/formatting.ts";
 import Input from "../UI/Input.tsx";
@@ -16,7 +16,7 @@ const requestConfig = {
 };
 const url = "http://localhost:5013/api/Orders";
 export default function Checkout() {
-  const { items, clearCart } = useContext(CartContext);
+  const { items, clearCart } = useCartContext();
   const { progress, hideCheckout } = useContext(UserProgressContext);
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,

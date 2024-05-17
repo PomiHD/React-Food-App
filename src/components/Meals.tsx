@@ -1,10 +1,9 @@
 ﻿import { currencyFormatter } from "../util/formatting.ts";
 import Button from "../UI/Button.tsx";
-import { useContext } from "react";
-import { CartContext } from "../store/CartContext.tsx";
+import { useCartContext } from "../store/CartContext.tsx";
 const url = "http://localhost:5013";
 export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
-  const { addItemToCart } = useContext(CartContext);
+  const { addItemToCart } = useCartContext();
   return (
     <>
       {isLoading && (

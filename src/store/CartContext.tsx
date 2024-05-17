@@ -1,4 +1,5 @@
-﻿import { createContext, ReactNode, useReducer } from "react";
+﻿import { createContext, ReactNode, useContext, useReducer } from "react";
+
 type CartItem = {
   id: string;
   name: string;
@@ -7,29 +8,56 @@ type CartItem = {
   image: string;
   quantity?: number;
 };
+
 type CartsState = {
   items: CartItem[];
 };
+
+const initialState: CartsState = {
+  items: [],
+};
+
 type CartContextValue = CartsState & {
   addItemToCart: (meal: CartItem) => void;
   removeItemQuantity: (id: string) => void;
   clearCart: () => void;
 };
 
+/**
+ * custom hook to access the cart context
+ * @returns the cart context
+ */
+export function useCartContext() {
+  const cartCtx = useContext(CartContext);
+
+  if (cartCtx === null) {
+    throw new Error("CartContext is null - that should not be the case!");
+  }
+  return cartCtx;
+}
+
 type AddItemAction = {
   type: "ADD_ITEM";
   item: CartItem;
 };
+
 type RemoveItemAction = {
   type: "REMOVE_ITEM";
   id: string;
 };
+
 type ClearCartAction = {
   type: "CLEAR_CART";
 };
+
 type Action = AddItemAction | RemoveItemAction | ClearCartAction;
 
-export const CartContext = createContext<CartContextValue | null>(null);
+/**
+ * @param state - the current state of the cart
+ * @param action - the action to be performed on the cart
+ * @returns the new state of the cart
+ */
+const CartContext = createContext<CartContextValue | null>(null);
 const CartReducer = (state: CartsState, action: Action) => {
   // ... update state to add meal item
   if (action.type === "ADD_ITEM") {
@@ -82,10 +110,12 @@ type CartContextProviderProps = {
   children: ReactNode;
 };
 
+/**
+ * @param children - the children of the cart context provider
+ * @returns the cart context provider
+ */
 function CartContextProvider({ children }: CartContextProviderProps) {
-  const [cartState, dispatchCartAction] = useReducer(CartReducer, {
-    items: [],
-  });
+  const [cartState, dispatchCartAction] = useReducer(CartReducer, initialState);
 
   const context: CartContextValue = {
     items: cartState.items,

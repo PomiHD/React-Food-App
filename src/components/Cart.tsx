@@ -1,5 +1,5 @@
 ﻿import { useContext } from "react";
-import { CartContext } from "../store/CartContext.tsx";
+import { useCartContext } from "../store/CartContext.tsx";
 import { currencyFormatter } from "../util/formatting.ts";
 import Modal from "../UI/Modal.tsx";
 import Button from "../UI/Button.tsx";
@@ -7,7 +7,7 @@ import { UserProgressContext } from "../store/UserProgressContext.tsx";
 
 export default function Cart() {
   const { progress, hideCart, showCheckout } = useContext(UserProgressContext);
-  const { items, removeItemQuantity, addItemToCart } = useContext(CartContext);
+  const { items, removeItemQuantity, addItemToCart } = useCartContext();
   const cartQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
