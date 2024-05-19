@@ -1,27 +1,24 @@
-﻿import { Error } from "./Error.tsx";
-import Meals from "./Meals.tsx";
+﻿import Meals from "./Meals.tsx";
 import useHttp from "../hooks/useHttp.tsx";
+import { ErrorMessage } from "./ErrorMessage.tsx";
 
-const requestConfig = {}; // to prevent loop in sendRequest due to useCallBack
 const url = "http://localhost:5013/api/Meals";
 export default function AvailableMeals() {
-  const {
-    data: availableMeals,
-    isLoading: isFetching,
-    error,
-  } = useHttp(url, requestConfig, []); // [] to prevent undefined error
+  const { data: availableMeals, isLoading: isFetching, error } = useHttp(url);
+
+  // if (isFetching) {
+  //   return <p className="center">Fetching meals...</p>;
+  // }
 
   if (error) {
-    return <Error title={"An error occured!"} message={error.message} />;
+    return <ErrorMessage title="Failed to fetch meals" message={error} />;
   }
   return (
-    <>
-      <Meals
-        meals={availableMeals}
-        isLoading={isFetching}
-        loadingText="Loading meals data..."
-        fallbackText="No meals available."
-      />
-    </>
+    <Meals
+      meals={availableMeals || []}
+      isLoading={isFetching}
+      loadingText="Loading meals data..."
+      fallbackText="No meals available."
+    />
   );
 }
