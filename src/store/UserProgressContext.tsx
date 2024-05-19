@@ -1,4 +1,4 @@
-﻿import { createContext, ReactNode, useState } from "react";
+﻿import { createContext, ReactNode, useContext, useState } from "react";
 
 type Progress = {
   progress: "" | "cart" | "checkout";
@@ -10,7 +10,8 @@ type UserProgressContextValue = Progress & {
   showCheckout: () => void;
   hideCheckout: () => void;
 };
-export const UserProgressContext = createContext<UserProgressContextValue>({
+
+const UserProgressContext = createContext<UserProgressContextValue>({
   progress: "", //cart,checkout
   showCart: () => {},
   hideCart: () => {},
@@ -18,11 +19,21 @@ export const UserProgressContext = createContext<UserProgressContextValue>({
   hideCheckout: () => {},
 });
 
+export function useUserProgressContext() {
+  const userProgressCtx = useContext(UserProgressContext);
+  if (userProgressCtx === null) {
+    throw new Error(
+      "UserProgressContext is null - that should not be the case!",
+    );
+  }
+  return userProgressCtx;
+}
+
 type UserProgressContextProviderProps = {
   children: ReactNode;
 };
 
-export default function UserProgressContextProvider({
+function UserProgressContextProvider({
   children,
 }: UserProgressContextProviderProps) {
   const [progress, setProgress] = useState<Progress["progress"]>("");
@@ -57,3 +68,5 @@ export default function UserProgressContextProvider({
     </UserProgressContext.Provider>
   );
 }
+
+export default UserProgressContextProvider;
