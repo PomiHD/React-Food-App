@@ -1,12 +1,12 @@
 ﻿import Modal from "../UI/Modal.tsx";
-import { useContext } from "react";
+import { FormEvent } from "react";
 import Button from "../UI/Button.tsx";
 import { useCartContext } from "../store/CartContext.tsx";
-import { UserProgressContext } from "../store/UserProgressContext.tsx";
+import { useUserProgressContext } from "../store/UserProgressContext.tsx";
 import { currencyFormatter } from "../util/formatting.ts";
 import Input from "../UI/Input.tsx";
-import { Error } from "./Error.tsx";
 import useHttp from "../hooks/useHttp.tsx";
+import { ErrorMessage } from "./ErrorMessage.tsx";
 
 const requestConfig = {
   method: "POST",
@@ -17,9 +17,9 @@ const requestConfig = {
 const url = "http://localhost:5013/api/Orders";
 export default function Checkout() {
   const { items, clearCart } = useCartContext();
-  const { progress, hideCheckout } = useContext(UserProgressContext);
+  const { progress, hideCheckout } = useUserProgressContext();
   const totalPrice = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.price * (item.quantity || 0),
     0,
   );
   const {
@@ -41,9 +41,9 @@ export default function Checkout() {
     hideCheckout();
   }
 
-  function handelSubmit(event) {
+  function handelSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const fd = new FormData(event.target);
+    const fd = new FormData(event.currentTarget);
     const customerData = Object.fromEntries(fd.entries());
 
     sendRequest(
@@ -51,7 +51,13 @@ export default function Checkout() {
         items: items,
         customer: customerData,
       }),
-    );
+    )
+      .then(() => {
+        console.log("Request sent successfully");
+      })
+      .catch((error) => {
+        console.error("Failed to send request:", error);
+      });
   }
 
   const modalActions = isSending ? (
@@ -104,7 +110,9 @@ export default function Checkout() {
           <Input label={"postalCode"} type={"text"} id={"postalCode"} />
           <Input label={"City"} type={"text"} id={"city"} />
         </div>
-        {error && <Error title={"Failed to submit order!"} message={error} />}
+        {error && (
+          <ErrorMessage title={"Failed to submit order!"} message={error} />
+        )}
         <div className={"modal-actions"}>{modalActions}</div>
       </form>
     </Modal>
