@@ -51,13 +51,9 @@ export default function Checkout() {
         items: items,
         customer: customerData,
       }),
-    )
-      .then(() => {
-        console.log("Request sent successfully");
-      })
-      .catch((error) => {
-        console.error("Failed to send request:", error);
-      });
+    ).catch((error) => {
+      console.error("Failed to send request:", error);
+    });
   }
 
   const modalActions = isSending ? (
