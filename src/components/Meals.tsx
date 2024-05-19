@@ -2,7 +2,28 @@
 import Button from "../UI/Button.tsx";
 import { useCartContext } from "../store/CartContext.tsx";
 const url = "http://localhost:5013";
-export default function Meals({ meals, isLoading, loadingText, fallbackText }) {
+
+export type Meal = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
+};
+
+type MealsProps = {
+  meals: Meal[];
+  isLoading: boolean;
+  loadingText: string;
+  fallbackText: string;
+};
+
+export default function Meals({
+  meals,
+  isLoading,
+  loadingText,
+  fallbackText,
+}: MealsProps) {
   const { addItemToCart } = useCartContext();
   return (
     <>
