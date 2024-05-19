@@ -1,4 +1,7 @@
-﻿export async function fetchAvailableMeals() {
+﻿/**
+ * @deprecated Use the useHttp hook instead.Since we use C# backend, this function is not needed.
+ */
+export async function fetchAvailableMeals() {
   const response = await fetch("http://localhost:3000/meals");
   const resData = await response.json();
   if (!response.ok) {
@@ -8,6 +11,9 @@
   return resData;
 }
 
+/**
+ * @deprecated Use the useHttp hook instead.Since we use C# backend, this function is not needed.
+ */
 export async function placeOrder(items, customerData) {
   const response = await fetch(`http://localhost:3000/orders`, {
     method: "POST",
