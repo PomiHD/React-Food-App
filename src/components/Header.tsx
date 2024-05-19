@@ -1,13 +1,15 @@
 ﻿import logoImg from "../assets/logo.jpg";
 import Button from "../UI/Button.tsx";
-import { useContext } from "react";
 import { useCartContext } from "../store/CartContext.tsx";
-import { UserProgressContext } from "../store/UserProgressContext.tsx";
+import { useUserProgressContext } from "../store/UserProgressContext.tsx";
 
 export default function Header() {
   const { items } = useCartContext();
-  const cartQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
-  const { showCart } = useContext(UserProgressContext);
+  const cartQuantity = items.reduce(
+    (acc, item) => acc + (item.quantity || 0),
+    0,
+  );
+  const { showCart } = useUserProgressContext();
 
   return (
     <>
