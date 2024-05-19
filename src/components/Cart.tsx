@@ -33,7 +33,7 @@ export default function Cart() {
       className={"cart"}
       title={"Your Cart"}
       open={progress === "cart"}
-      onClose={progress === "cart" ? hideCart : null}
+      onClose={progress === "cart" ? hideCart : () => {}}
     >
       {items.length === 0 && <p>No items in cart!</p>}
       {items.length > 0 && (
