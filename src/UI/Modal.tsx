@@ -1,16 +1,26 @@
-﻿import { useEffect, useRef } from "react";
-
+﻿import { type ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-function Modal({ title, children, open, onClose, className = "" }) {
-  const dialog = useRef();
+type ModalProps = {
+  title: string;
+  children: ReactNode;
+  open: boolean;
+  onClose: () => void;
+  className?: string;
+};
+
+function Modal({ title, children, open, onClose, className = "" }: ModalProps) {
+  const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const modal = dialog.current;
-    if (open) {
-      // @ts-ignore
+    if (modal && open) {
       modal.showModal();
     }
-    return () => modal.close();
+    return () => {
+      if (modal) {
+        modal.close();
+      }
+    };
   }, [open]);
 
   return createPortal(
@@ -18,7 +28,7 @@ function Modal({ title, children, open, onClose, className = "" }) {
       <h2>{title}</h2>
       {children}
     </dialog>,
-    document.getElementById("modal"),
+    document.getElementById("modal") as Element,
   );
 }
 
